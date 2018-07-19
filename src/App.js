@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import Home from './Home';
-import { connect } from 'react-redux';
 
 
-class App extends Component {
+export default class App extends Component {
 
 
 
@@ -15,5 +14,3 @@ class App extends Component {
     );
   }
 }
-
-export default connect(null, { getLocations })(App);

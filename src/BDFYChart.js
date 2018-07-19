@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { monthDaysYellow } from './store/monthDaysYellow';
 import { monthHoursYellow } from './store/monthHoursYellow';
-import { Card, Icon } from '@blueprintjs/core'
+import { totalsPerDayFromYellow } from './store/totalsPerDayFromYellow';
+import { totalsPerHourFromYellow } from './store/totalsPerHourFromYellow';
+import { Card, Icon, Button } from '@blueprintjs/core'
 
 export default class BDFYChart extends Component {
   state = {
@@ -18,42 +20,122 @@ export default class BDFYChart extends Component {
     day: '',
     totalRidesPerHour: [],
     totalFaresPerHour: [],
-    totalMilesPerHour: []
+    totalMilesPerHour: [],
 
+    activeChart: 'DAILY'
+
+  }
+
+  showMonthly = () => {
+    this.setState({
+      activeChart: 'MONTHLY'
+    })
+  }
+
+  showDaily = () => {
+    this.setState({
+      activeChart: 'DAILY',
+      showMiniTable: false,
+      showMiniTable2: false
+    })
+  }
+
+  showHourly = () => {
+    this.setState({
+      activeChart: 'HOURLY',
+      showMiniTable: false,
+      showMiniTable2: false
+    })
   }
 
   render(){
     const months = ['January', 'February', 'March', 'April', 'May', 'June']
+
+    const ridesDaily = () => {
+      let result = [];
+      for (let day in totalsPerDayFromYellow) {
+        result.push(totalsPerDayFromYellow[day][0])
+      }
+      return result
+    }
+
+    const faresDaily = () => {
+      let result = [];
+      for (let day in totalsPerDayFromYellow) {
+        result.push(totalsPerDayFromYellow[day][1])
+      }
+      return result
+    }
+
+    const milesDaily = () => {
+      let result = [];
+      for (let day in totalsPerDayFromYellow) {
+        result.push(totalsPerDayFromYellow[day][2])
+      }
+      return result
+    }
+
+    const ridesHourly = () => {
+      let result = [];
+      for (let hour in totalsPerHourFromYellow) {
+        result.push(totalsPerHourFromYellow[hour][0])
+      }
+      return result
+    }
+
+    const faresHourly = () => {
+      let result = [];
+      for (let hour in totalsPerHourFromYellow) {
+        result.push(totalsPerHourFromYellow[hour][1])
+      }
+      return result
+    }
+
+    const milesHourly = () => {
+      let result = [];
+      for (let hour in totalsPerHourFromYellow) {
+        result.push(totalsPerHourFromYellow[hour][2])
+      }
+      return result
+    }
+
+
     const totalRides = [17365, 16274, 16965, 16927, 16708, 15356]
     const totalMiles = [2750273, 2656563, 2962081, 2881341, 2827149, 2643000]
     const totalFares = [12030211, 11649029, 13231405, 12619778, 12579974, 11699126]
     const handleLineChartClick = (e, i) => {
 
-      if (i[0]) {
-        let index = i[0]._index
-        let month = chartValues.labels[index].toLowerCase()
-        let totalRides = [];
-        let totalFares = [];
-        let totalMiles = [];
+      if (this.state.activeChart === 'MONTHLY'){
+        if (i[0]) {
+          let index = i[0]._index
+          let month = chartValues.labels[index].toLowerCase()
+          let totalRides = [];
+          let totalFares = [];
+          let totalMiles = [];
 
-        this.state.days.forEach((day) => {
-          totalRides.push(monthDaysYellow[month][day]['totalrides'])
-          totalFares.push(monthDaysYellow[month][day]['totalfares'])
-          totalMiles.push(monthDaysYellow[month][day]['totalmiles'])
+          this.state.days.forEach((day) => {
+            totalRides.push(monthDaysYellow[month][day]['totalrides'])
+            totalFares.push(monthDaysYellow[month][day]['totalfares'])
+            totalMiles.push(monthDaysYellow[month][day]['totalmiles'])
 
-        })
-        this.setState({
-          showMiniTable: true,
-          showMiniTable2: false,
-          month: month,
-          totalRides: totalRides,
-          totalFares: totalFares,
-          totalMiles: totalMiles,
+          })
+          this.setState({
+            showMiniTable: true,
+            showMiniTable2: false,
+            month: month,
+            totalRides: totalRides,
+            totalFares: totalFares,
+            totalMiles: totalMiles,
 
-        })
+          })
+        } else {
+          return null
+        }
       } else {
         return null
       }
+
+
     }
 
     const handleMiniChartClick = (e,i) => {
@@ -98,7 +180,7 @@ export default class BDFYChart extends Component {
           }, {
 
             type: 'line',
-            label: 'TOTAL MILES FROM GREEN AND YELLOW ZONES',
+            label: 'TOTAL MILES - Miles (from all zones)',
             data: totalMiles,
             backgroundColor: 'rgba(0, 0, 0, 0)',
             borderColor: 'rgb(128, 132, 128)',
@@ -108,7 +190,7 @@ export default class BDFYChart extends Component {
           }, {
 
             type: 'line',
-            label: 'TOTAL FARES - USD (includes from green zones)',
+            label: 'TOTAL FARES - USD (from all zones)',
             data: totalFares,
             backgroundColor: 'rgba(0, 0, 0, 0)',
             borderColor: 'rgb(36, 43, 36)',
@@ -119,12 +201,171 @@ export default class BDFYChart extends Component {
         ]
       }
 
+      const dailyValues = {
+        labels: this.state.days.map(day => day.toUpperCase()),
+        datasets: [
+          {
+            type: 'line',
+            label: 'TOTAL RIDES (from yellow zones only)',
+            data: ridesDaily(),
+            backgroundColor: 'rgba(0, 0, 0, 0)',
+            borderColor: 'rgb(229, 218, 6)',
+            pointRadius: 2,
+            borderWidth: 1
+
+          }, {
+            type: 'line',
+            label: 'TOTAL MILES - Miles (from all zones)',
+            data: milesDaily(),
+            backgroundColor: 'rgba(0, 0, 0, 0)',
+            borderColor: 'rgb(128, 132, 128)',
+            pointRadius: 2,
+            borderWidth: 1
+          }, {
+            type: 'line',
+            label: 'TOTAL FARES - USD (from all zones)',
+            data: faresDaily(),
+            backgroundColor: 'rgba(0, 0, 0, 0)',
+            borderColor: 'rgb(36, 43, 36)',
+            pointRadius: 2,
+            borderWidth: 1
+          }
+        ]
+      }
+
+      const hourlyValues = {
+        labels: Object.keys(totalsPerHourFromYellow),
+        datasets: [
+          {
+            type: 'line',
+            label: 'TOTAL RIDES (from yellow zones only)',
+            data: ridesHourly(),
+            backgroundColor: 'rgba(0, 0, 0, 0)',
+            borderColor: 'rgb(229, 218, 6)',
+            pointRadius: 2,
+            borderWidth: 1
+          }, {
+            type: 'line',
+            label: 'TOTAL MILES - Miles (from all zones)',
+            data: milesHourly(),
+            backgroundColor: 'rgba(0, 0, 0, 0)',
+            borderColor: 'rgb(128, 132, 128)',
+            pointRadius: 2,
+            borderWidth: 1
+          }, {
+            type: 'line',
+            label: 'TOTAL FARES - USD (from all zones)',
+            data: faresHourly(),
+            backgroundColor: 'rgba(0, 0, 0, 0)',
+            borderColor: 'rgb(36, 43, 36)',
+            pointRadius: 2,
+            borderWidth: 1
+          }
+        ]
+      }
+
+      const hourlyOptions = {
+        legend: {
+          display: true,
+          labels: {
+            fontColor: 'black',
+            fontSize: 10,
+            boxWidth: 12
+          }
+        },
+        layout: {
+            padding: {
+                left: 30,
+                right: 20,
+                top: 0,
+                bottom: 10
+            }
+        },
+        scales: {
+            yAxes: [{
+              scaleLabel: {
+                display: false,
+                labelString: "NO. OF RIDES / TOTAL FARES COLLECTED (USD)",
+                fontFamily: 'Helvetica',
+                fontSize: 8,
+                fontStyle: 'normal',
+                fontColor: 'rgb(60,60,60)'
+              },
+              ticks: {
+                fontSize: 7,
+                beginAtZero: true
+              }
+            }],
+            xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'HOURS',
+                fontFamily: 'Helvetica',
+                fontSize: 10,
+                fontStyle: 'normal',
+                fontColor: 'rgb(60,60,60)'
+              },
+              ticks: {
+                fontSize: 7
+              }
+            }]
+          }
+      }
+
+      const dailyOptions = {
+        legend: {
+          display: true,
+          labels: {
+            fontColor: 'black',
+            fontSize: 10,
+            boxWidth: 12
+          }
+        },
+        layout: {
+            padding: {
+                left: 30,
+                right: 20,
+                top: 0,
+                bottom: 10
+            }
+        },
+        scales: {
+            yAxes: [{
+              scaleLabel: {
+                display: false,
+                labelString: "NO. OF RIDES / TOTAL FARES COLLECTED (USD)",
+                fontFamily: 'Helvetica',
+                fontSize: 8,
+                fontStyle: 'normal',
+                fontColor: 'rgb(60,60,60)'
+              },
+              ticks: {
+                fontSize: 7,
+                beginAtZero: true
+              }
+            }],
+            xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'DAYS',
+                fontFamily: 'Helvetica',
+                fontSize: 10,
+                fontStyle: 'normal',
+                fontColor: 'rgb(60,60,60)'
+              },
+              ticks: {
+                fontSize: 7
+              }
+            }]
+          }
+      }
+
       const chartOptions = {
           legend: {
             display: true,
             labels: {
               fontColor: 'black',
-              fontSize: 8,
+              fontSize: 10,
               boxWidth: 12
             }
           },
@@ -186,7 +427,7 @@ export default class BDFYChart extends Component {
               }, {
 
                 type: 'line',
-                label: 'TOTAL MILES FROM GREEN AND YELLOW ZONES',
+                label: 'TOTAL MILES - Miles (from all zones)',
                 data: this.state.totalMiles,
                 backgroundColor: 'rgba(0, 0, 0, 0)',
                 borderColor: 'rgb(128, 132, 128)',
@@ -196,7 +437,7 @@ export default class BDFYChart extends Component {
               }, {
 
                 type: 'line',
-                label: 'TOTAL FARES - USD (includes from green zones)',
+                label: 'TOTAL FARES - USD (from all zones)',
                 data: this.state.totalFares,
                 backgroundColor: 'rgba(0, 0, 0, 0)',
                 borderColor: 'rgb(36, 43, 36)',
@@ -288,7 +529,7 @@ export default class BDFYChart extends Component {
                           }, {
 
                             type: 'line',
-                            label: 'TOTAL MILES FROM GREEN AND YELLOW ZONES',
+                            label: 'TOTAL MILES - Miles (from all zones)',
                             data: this.state.totalMilesPerHour,
                             backgroundColor: 'rgba(0, 0, 0, 0)',
                             borderColor: 'rgb(128, 132, 128)',
@@ -298,7 +539,7 @@ export default class BDFYChart extends Component {
                           }, {
 
                             type: 'line',
-                            label: 'TOTAL FARES - USD (includes from green zones)',
+                            label: 'TOTAL FARES - USD (from all zones)',
                             data: this.state.totalFaresPerHour,
                             backgroundColor: 'rgba(0, 0, 0, 0)',
                             borderColor: 'rgb(36, 43, 36)',
@@ -368,16 +609,49 @@ export default class BDFYChart extends Component {
                             }]
                           }
                         }
+    const activeChart = () => {
+      if (this.state.activeChart === 'MONTHLY'){
+        return(
+          <Bar data={chartValues} responsive={false} width={350} height={290} options={chartOptions} />
+        )
+      }
+      else if (this.state.activeChart === 'DAILY') {
+        return(
+          <Bar data={dailyValues} responsive={false} width={350} height={290} options={dailyOptions} />
+        )
+      }
+      else if (this.state.activeChart === 'HOURLY') {
+        return(
+          <Bar data={hourlyValues} responsive={false} width={350} height={290} options={hourlyOptions} />
+        )
+      }
 
+    }
 
     return (
       <div>
         <br></br>
         <div className='row'>
           <div className='column column-7'>
-            <Bar data={chartValues} responsive={false} width={350} height={290} options={chartOptions} />
-          </div>
+          {activeChart()}
 
+            <div style={{marginLeft: '9.5%'}}>
+
+
+
+                <Button minimal small={true} onClick={this.showMonthly} active={this.state.activeChart === 'MONTHLY'} style={{fontSize: '45%'}}>
+                  BY MONTH
+                </Button>
+                <Button minimal small={true} onClick={this.showDaily} active={this.state.activeChart === 'DAILY'} style={{fontSize: '45%'}}>
+                  BY DAY
+                </Button>
+                <Button minimal small={true} onClick={this.showHourly} active={this.state.activeChart === 'HOURLY'} style={{fontSize: '45%'}}>
+                  BY HOUR
+                </Button>
+
+
+            </div>
+        </div>
           <div className='column column-5'>
             <div className='row'>
               {this.state.showMiniTable ?
@@ -390,8 +664,8 @@ export default class BDFYChart extends Component {
                     <Icon icon='arrow-left' iconSize={15} />
                   </div>
                   <div className='datapoint-placeholder-time'>
-                    CLICK ON POINTS IN CHART ON THE LEFT TO
-                    VIEW DAILY DATA HERE
+                  CLICK ON POINTS IN 'BY MONTH' CHART TO
+                  VIEW DAILY DATA PER MONTH HERE
                   </div>
                 </Card>
               }

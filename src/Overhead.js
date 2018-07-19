@@ -146,66 +146,6 @@ export default class Home extends Component {
               </div>
             </div>
             <div className='column column-3 header-labels'>
-              MOST POPULAR DESTINATION (FROM YELLOW):
-              <br></br>
-              <div className='header-content'>UPPER EAST SIDE NORTH
-                <br></br>
-                <span className='header-figure'>11,511 <span className='header-figure-label'>RIDES</span></span>
-                <Button minimal onClick={this.toggleMPDYOverlay} small={true} className='header-buttons'>
-                  <Icon  icon='maximize' color='black' iconSize={7} />
-                </Button>
-                <Overlay isOpen={this.state.MPDYOverlayIsOpen} transitionDuration={0} onClose={this.toggleMPDYOverlay}>
-                  <Card className='card-style'>
-                    <div className='close-icon'>
-                      <Button minimal onClick={this.toggleMPDYOverlay}>
-                        <Icon icon='cross' color='black' iconSize={12} />
-                      </Button>
-                    </div>
-                    <div className='header-chart'>
-                      <div className='header-chart-title'>
-                      MOST POPULAR DESTINATIONS W/ GREEN CABS
-                      <br></br>
-                      <span className='chart-title-bottom'>FROM YELLOW ZONES (01/2017 - 06/2017)</span>
-                      <br></br>
-                      </div>
-                      <MPDYChart />
-                    </div>
-                  </Card>
-                </Overlay>
-              </div>
-            </div>
-            <div className='column column-3 header-labels'>
-              BUSIEST DAY (FROM YELLOW):
-              <br></br>
-              <div className='header-content'>FRIDAYS
-                <br></br>
-                <span className='header-figure'>16,728 <span className='header-figure-label'>RIDES</span></span>
-                <Button minimal onClick={this.toggleBDFYOverlay} small={true} className='header-buttons'>
-                  <Icon  icon='maximize' color='black' iconSize={7} />
-                </Button>
-                <Overlay isOpen={this.state.BDFYOverlayIsOpen} transitionDuration={0} onClose={this.toggleBDFYOverlay}>
-                  <Card className='card-style'>
-                    <div className='close-icon'>
-                      <Button minimal onClick={this.toggleBDFYOverlay}>
-                        <Icon icon='cross' color='black' iconSize={12} />
-                      </Button>
-                    </div>
-                    <div className='header-chart'>
-                      <div className='header-chart-title'>
-                      BUSIEST TIMES FROM YELLOW ZONES
-                      <br></br>
-                      <span className='chart-title-bottom'>(01/2017 - 06/2017)</span>
-                      <br></br>
-                      </div>
-                      <BDFYChart />
-                    </div>
-                  </Card>
-                </Overlay>
-              </div>
-            </div>
-          </div>
-          <div className='row' style={{marginTop: '2%'}}>
-            <div className='column column-3 header-labels'>
               MOST POPULAR PICK-UP LOCATION (TO GREEN):
               <br></br>
               <div className='header-content'>ASTORIA
@@ -258,6 +198,66 @@ export default class Home extends Component {
                       <br></br>
                       </div>
                       <BDTGChart />
+                    </div>
+                  </Card>
+                </Overlay>
+              </div>
+            </div>
+          </div>
+          <div className='row' style={{marginTop: '2%'}}>
+            <div className='column column-3 header-labels'>
+              MOST POPULAR DESTINATION (FROM YELLOW):
+              <br></br>
+              <div className='header-content'>UPPER EAST SIDE NORTH
+                <br></br>
+                <span className='header-figure'>11,511 <span className='header-figure-label'>RIDES</span></span>
+                <Button minimal onClick={this.toggleMPDYOverlay} small={true} className='header-buttons'>
+                  <Icon  icon='maximize' color='black' iconSize={7} />
+                </Button>
+                <Overlay isOpen={this.state.MPDYOverlayIsOpen} transitionDuration={0} onClose={this.toggleMPDYOverlay}>
+                  <Card className='card-style'>
+                    <div className='close-icon'>
+                      <Button minimal onClick={this.toggleMPDYOverlay}>
+                        <Icon icon='cross' color='black' iconSize={12} />
+                      </Button>
+                    </div>
+                    <div className='header-chart'>
+                      <div className='header-chart-title'>
+                      MOST POPULAR DESTINATIONS W/ GREEN CABS
+                      <br></br>
+                      <span className='chart-title-bottom'>FROM YELLOW ZONES (01/2017 - 06/2017)</span>
+                      <br></br>
+                      </div>
+                      <MPDYChart />
+                    </div>
+                  </Card>
+                </Overlay>
+              </div>
+            </div>
+            <div className='column column-3 header-labels'>
+              BUSIEST DAY (FROM YELLOW):
+              <br></br>
+              <div className='header-content'>FRIDAYS
+                <br></br>
+                <span className='header-figure'>16,728 <span className='header-figure-label'>RIDES</span></span>
+                <Button minimal onClick={this.toggleBDFYOverlay} small={true} className='header-buttons'>
+                  <Icon  icon='maximize' color='black' iconSize={7} />
+                </Button>
+                <Overlay isOpen={this.state.BDFYOverlayIsOpen} transitionDuration={0} onClose={this.toggleBDFYOverlay}>
+                  <Card className='card-style'>
+                    <div className='close-icon'>
+                      <Button minimal onClick={this.toggleBDFYOverlay}>
+                        <Icon icon='cross' color='black' iconSize={12} />
+                      </Button>
+                    </div>
+                    <div className='header-chart'>
+                      <div className='header-chart-title'>
+                      BUSIEST TIMES FROM YELLOW ZONES
+                      <br></br>
+                      <span className='chart-title-bottom'>(01/2017 - 06/2017)</span>
+                      <br></br>
+                      </div>
+                      <BDFYChart />
                     </div>
                   </Card>
                 </Overlay>
