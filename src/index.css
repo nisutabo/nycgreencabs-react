@@ -95,7 +95,7 @@
   left: 15%;
   margin-top: 4%;
   background-color: white;
-  height: 590px;
+  height: 100%;
   width: 70%;
   border-radius: 0%;
   background-color: white;
@@ -111,7 +111,7 @@
 }
 
 .header-highlight-card-time {
-  height: 220px;
+  height: 100%;
   text-align: left;
 }
 
